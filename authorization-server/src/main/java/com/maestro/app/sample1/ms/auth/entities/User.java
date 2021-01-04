@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table
+@Table(name = "USERS")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends BaseGuidEntity implements UserDetails {

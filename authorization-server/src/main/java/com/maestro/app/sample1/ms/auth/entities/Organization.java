@@ -7,14 +7,11 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table
+@Table(name = "ORGS")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Organization extends BaseGuidEntity {
     private static final long serialVersionUID = 1L;
 
-    private String idPar;
     private String name;
-    private String centre;
-    private Integer orgLevel;
 }

@@ -8,7 +8,7 @@ import javax.persistence.Table;
 
 @Data
 @Entity
-@Table
+@Table(name = "PERMISSIONS")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Permission extends BaseIdEntity {

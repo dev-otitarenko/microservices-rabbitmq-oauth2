@@ -7,23 +7,23 @@ import lombok.Data;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 public class TestUtils {
-    public static String SQL_ROLE_CREATE = "insert into t_am00_user_roles(id_user, id_role, oper_date) values (?, ?, ?)";
-    public static String SQL_USER_CREATE = "insert into t_am00_users(id, username, full_name, email, enabled, id_org, id_org_main, psw) values (?, ?, ?, ?, ?, ?, ?, ?)";
-    public static String SQL_USER_DELETE = "delete from t_am00_users where id = ?";
+    public static String SQL_ROLE_CREATE = "insert into user_roles(id_user, id_role, oper_date) values (?, ?, ?)";
+    public static String SQL_USER_CREATE = "insert into users(id, username, full_name, email, enabled, id_org, id_org_main, psw) values (?, ?, ?, ?, ?, ?, ?, ?)";
+    public static String SQL_USER_DELETE = "delete from users where id = ?";
 
     public static String PRIME_IDORG = "c7ff810990e14ff4a739382945722385";
 
     public static AuthUser queryAuthUser(JdbcTemplate jdbcTemplate, String id) {
-        TUser user = jdbcTemplate.queryForObject("SELECT * FROM t_am00_users WHERE ID = ?", new Object[]{ id }, (rs, rowNum) ->
+        TUser user = jdbcTemplate.queryForObject("SELECT * FROM users WHERE ID = ?", new Object[]{ id }, (rs, rowNum) ->
                 new TUser(
                         rs.getString("id"),
                         rs.getString("username"),
                         rs.getString("id_org"),
                         rs.getString("psw")
                 ));
-        TRole rls = jdbcTemplate.queryForObject("SELECT min(ID_ROLE) as ID_ROLE FROM t_am00_user_roles WHERE ID_USER = ?", new Object[]{ id }, (rs, rowNum) ->
+        TRole rls = jdbcTemplate.queryForObject("SELECT min(ID_ROLE) as ID_ROLE FROM user_roles WHERE ID_USER = ?", new Object[]{ id }, (rs, rowNum) ->
                 new TRole(rs.getLong("id_role")));
-        TOrg org = jdbcTemplate.queryForObject("SELECT * FROM t_am00_orgs WHERE ID = ?", new Object[]{ user.getIdOrg() }, (rs, rowNum) ->
+        TOrg org = jdbcTemplate.queryForObject("SELECT * FROM orgs WHERE ID = ?", new Object[]{ user.getIdOrg() }, (rs, rowNum) ->
                 new TOrg(
                         rs.getString("name"),
                         rs.getInt("org_level")

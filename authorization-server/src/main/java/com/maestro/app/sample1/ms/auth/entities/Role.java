@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table
+@Table(name = "ROLES")
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class Role extends BaseIdEntity {
@@ -18,7 +18,7 @@ public class Role extends BaseIdEntity {
 	private String name;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "permission_role", joinColumns = {
+	@JoinTable(name = "permission_roles", joinColumns = {
 			@JoinColumn(name = "id_role", referencedColumnName = "id") }, inverseJoinColumns = {
 			@JoinColumn(name = "id_permission", referencedColumnName = "id") })
 	private List<Permission> permissions;
