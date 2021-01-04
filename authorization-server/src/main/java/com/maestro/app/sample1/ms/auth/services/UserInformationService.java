@@ -1,8 +1,6 @@
 package com.maestro.app.sample1.ms.auth.services;
 
-import com.maestro.app.sample1.ms.auth.entities.DeviceMetadata;
 import com.maestro.app.sample1.ms.auth.entities.User;
-import com.maestro.app.sample1.ms.auth.repositories.DeviceMetadataRepository;
 import com.maestro.app.sample1.ms.auth.repositories.UserRepository;
 import com.maestro.app.utils.CommonUtils;
 import com.maestro.app.utils.queue.QueueLogConnectEvt;
@@ -26,8 +24,6 @@ import static java.util.Objects.nonNull;
 @Component
 public class UserInformationService {
      @Autowired
-     private DeviceMetadataRepository deviceMetadataRepository;
-     @Autowired
      private UserRepository userRepository;
      @Autowired
      private Parser parser;
@@ -44,23 +40,6 @@ public class UserInformationService {
                 deviceDetails = getDeviceDetails(request.getHeader("user-agent"));
          if (deviceDetails.length() > 512) deviceDetails = deviceDetails.substring(0, 508) + "...";
          ClientLocation client =new ClientLocation(UNKNOWN, UNKNOWN, UNKNOWN);
-         DeviceMetadata existingDevice = findExistingDevice(user.getId(), deviceDetails, client);
-
-         if (Objects.isNull(existingDevice)) {
-             DeviceMetadata deviceMetadata = new DeviceMetadata();
-             deviceMetadata.setId(CommonUtils.generateGuid());
-             deviceMetadata.setUserId(user.getId());
-             deviceMetadata.setIpAddress(ip);
-             deviceMetadata.setCountry(client.getCountry());
-             deviceMetadata.setCountryCode(client.getCountryCode());
-             deviceMetadata.setCity(client.getCity());
-             deviceMetadata.setDeviceDetails(deviceDetails);
-             deviceMetadata.setLastLoggedIn(new Date());
-             deviceMetadataRepository.save(deviceMetadata);
-         } else {
-             existingDevice.setLastLoggedIn(new Date());
-             deviceMetadataRepository.save(existingDevice);
-         }
 
          // form LogConnects
          QueueLogConnectEvt evt = new QueueLogConnectEvt();
@@ -105,21 +84,6 @@ public class UserInformationService {
          }
 
          return deviceDetails;
-     }
-
-     private DeviceMetadata findExistingDevice(String userId, String deviceDetails, ClientLocation client) {
-         List<DeviceMetadata> knownDevices = deviceMetadataRepository.findByUserId(userId);
-
-         for (DeviceMetadata existingDevice : knownDevices) {
-             if (existingDevice.getDeviceDetails().equals(deviceDetails) &&
-                 existingDevice.getCountry().equals(client.getCountry()) &&
-                 existingDevice.getCountryCode().equals(client.getCountryCode()) &&
-                 existingDevice.getCity().equals(client.getCity())) {
-                 return existingDevice;
-             }
-         }
-
-         return null;
      }
 
      @Data

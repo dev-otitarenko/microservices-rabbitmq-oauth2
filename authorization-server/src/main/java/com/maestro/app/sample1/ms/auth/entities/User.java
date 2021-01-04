@@ -40,7 +40,7 @@ public class User extends BaseGuidEntity implements UserDetails {
 	private Organization organization;
 
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "t_am00_user_roles", joinColumns = {
+	@JoinTable(name = "user_roles", joinColumns = {
 			@JoinColumn(name = "id_user", referencedColumnName = "id") }, inverseJoinColumns = {
 					@JoinColumn(name = "id_role", referencedColumnName = "id") })
 	private List<Role> roles;
