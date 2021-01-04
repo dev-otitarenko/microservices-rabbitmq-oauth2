@@ -19,6 +19,7 @@
         <module>app-service-lib</module>
         <module>authorization-server</module>
         <module>events-service</module>
+        <module>messages-service</module>
     </modules>
 
     <properties>
