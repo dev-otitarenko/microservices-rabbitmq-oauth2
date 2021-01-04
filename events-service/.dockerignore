@@ -1,0 +1,10 @@
+#all
+src
+Dockerfile
+target/*
+!target/*.jar
+
+
+#node
+node_modules
+e2e
