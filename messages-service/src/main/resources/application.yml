@@ -1,0 +1,72 @@
+# server conf section
+server:
+  port: 8813
+  servlet:
+    context-path: /messages
+
+# spring conf section
+spring:
+  application:
+    name: messages-service
+  resources:
+    chain:
+      enabled: true
+  datasource:
+    url: jdbc:sqlserver://${app.db.server};databaseName=${app.db.name}
+    username: ${app.db.user}
+    password: ${app.db.psw}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      # connection-timeout: 12000 #maximum number of milliseconds that a client will wait for a connection
+      minimum-idle: 15 #minimum number of idle connections maintained by HikariCP in a connection pool
+      maximum-pool-size: 30 #maximum pool size
+      #idle-timeout: 10000 #maximum idle time for connection
+      # max-lifetime: 10000 # maximum lifetime in milliseconds of a connection in the pool after it is closed.
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  rabbitmq:
+    host: ${rabbitmq.server}
+    port: ${rabbitmq.port}
+    username: ${rabbitmq.user}
+    password: ${rabbitmq.psw}
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 1
+    template:
+      retry:
+        initial-interval: 1000ms
+        max-attempts: 2
+        max-interval: 10000ms
+        multiplier: 1 # Eureka conf
+
+# ribbon
+ribbon:
+  # Connect timeout used by HttpClient
+  ConnectTimeout: 12000
+  # Read timeout used by HttpClient
+  ReadTimeout: 30000
+  # Max number of retries on the same server (excluding the first try)
+  MaxAutoRetries: 1
+  # Max number of next servers to retry (excluding the first server)
+  MaxAutoRetriesNextServer: 1
+  eager-load:
+    enabled: true
+#    clients: account-service,dicts-service,doc-service
+
+#SLF4J
+logging:
+  level:
+    ROOT: ERROR
+    org.springframework.web: ERROR
+    com.organization.app.ms.messages: ${app.telemetry.level}
+  file:  /tmp/logs/application.log
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
