@@ -1,0 +1,116 @@
+version: '2.3'
+
+services:
+  rabbitmq:
+    image: "rabbitmq:3.7-management-alpine"
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: "admin"
+      RABBITMQ_DEFAULT_PASS: "rabbit"
+      RABBITMQ_HIPE_COMPILE: 1
+    volumes:
+      - ./docker/rabbitmq:/var/lib/rabbitmq/mnesia
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  auth-service:
+    build:
+      context: ./authorization-server
+      dockerfile: Dockerfile
+    container_name: auth-service
+    hostname: auth-service
+    restart: always
+    ports:
+      - "8811:8811"
+    volumes:
+      - ./docker/auth-server/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx200M -XX:MaxRAM=256M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sample1-db
+      app.db.name: authdb
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      rabbitmq.user: admin
+      rabbitmq.psw: rabbit
+      rabbitmq.server: rabbitmq
+      rabbitmq.port: 5672
+
+  logs-service:
+    build:
+      context: ./events-service
+      dockerfile: Dockerfile
+    container_name: logs-service
+    hostname: logs-service
+    restart: always
+    ports:
+      - "8812:8812"
+    volumes:
+      - ./docker/logs-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx200M -XX:MaxRAM=256M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sample1-db
+      app.db.name: authdb
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      auth-server.user: adminapp
+      auth-server.secret: password
+      auth-server.url: http://auth-service:8812
+      rabbitmq.user: admin
+      rabbitmq.psw: rabbit
+      rabbitmq.server: rabbitmq
+      rabbitmq.port: 5672
+
+  messages-service:
+    build:
+      context: ./messages-service
+      dockerfile: Dockerfile
+    container_name: messages-service
+    hostname: messages-service
+    restart: always
+    ports:
+      - "8813:8813"
+    volumes:
+      - ./docker/messages-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx200M -XX:MaxRAM=256M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: sample1-db
+      app.db.name: authdb
+      app.db.user: sa
+      app.db.psw: Passw0rd2
+      auth-server.user: adminapp
+      auth-server.secret: password
+      auth-server.url: http://auth-service:8812
+      rabbitmq.user: admin
+      rabbitmq.psw: rabbit
+      rabbitmq.server: rabbitmq
+      rabbitmq.port: 5672
+
+  process-service:
+    build:
+      context: ./process-service
+      dockerfile: Dockerfile
+    container_name: process-service
+    hostname: process-service
+    restart: always
+    ports:
+      - "8814:8814"
+    volumes:
+      - ./docker/messages-service/logs:/tmp/logs
+    environment:
+      JAVA_OPTS: -Xmx200M -XX:MaxRAM=256M -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap
+      app.telemetry.level: INFO
+      app.db.server: mssqldev
+      app.db.name: auth-db
+      app.db.user: sa
+      app.db.psw: YourPassword
+      auth-server.user: adminapp
+      auth-server.secret: password
+      auth-server.url: http://auth-service:8812
+      rabbitmq.user: admin
+      rabbitmq.psw: rabbit
+      rabbitmq.server: rabbitmq
+      rabbitmq.port: 5672
