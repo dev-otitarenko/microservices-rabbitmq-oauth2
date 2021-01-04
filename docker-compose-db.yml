@@ -6,10 +6,9 @@ services:
     restart: always
     environment:
       ACCEPT_EULA: Y
-      SA_PASSWORD: your-password
-      MSSQL_DB: auth-db
+      SA_PASSWORD: Passw0rd2
     ports:
-      - 1433:1433
-    container_name: mssqldev
+      - 1443:1433
+    container_name: sample1-db
     volumes:
       - ./docker/db/data:/var/opt/mssql
