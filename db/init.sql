@@ -189,10 +189,6 @@ ALTER TABLE [dbo].[user_messages] ADD  DEFAULT ((0)) FOR [STATE]
 GO
 
 -- USERS
-    SET ANSI_NULLS ON
-    GO
-    SET QUOTED_IDENTIFIER ON
-    GO
 CREATE TABLE [dbo].[users](
     [ID] [varchar](32) NOT NULL,
     [USERNAME] [varchar](96) NULL,
