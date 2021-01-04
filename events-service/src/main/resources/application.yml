@@ -65,7 +65,7 @@ logging:
   level:
     ROOT: ERROR
     org.springframework.web: ERROR
-    com.organization.app.ms.logs: ${app.telemetry.level}
+    com.maestro.app.sample1.ms.events: ${app.telemetry.level}
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
