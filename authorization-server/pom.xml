@@ -10,8 +10,8 @@
 	<description>${project.name}</description>
 
 	<parent>
-		<groupId>com.maestrro.app</groupId>
-		<artifactId>app-microservices-smaple1</artifactId>
+		<groupId>com.maestro.app</groupId>
+		<artifactId>app-microservices-sample1</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
