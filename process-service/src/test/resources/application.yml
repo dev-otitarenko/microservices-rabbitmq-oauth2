@@ -1,0 +1,49 @@
+local.server.port:
+
+auth-server:
+  url: ${auth_url}
+  user: ${auth_user}
+  secret: ${auth_psw}
+
+testuser:
+  name: ${user1.name}
+  psw: ${user1.psw}
+
+spring:
+  application:
+    name: messages-service
+  datasource:
+    url: jdbc:sqlserver://${db_host};databaseName=${db_name}
+    username: ${db_user}
+    password: ${db_psw}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+  rabbitmq:
+    host: ${rabbit_host}
+    port: ${rabbit_port}
+    username: ${rabbit_user}
+    password: ${rabbit_psw}
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 2
+    template:
+      retry:
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+        multiplier: 1 # Eureka conf
+
+logging:
+  level:
+    ROOT: ERROR
+    org.springframework.web: INFO
+    org.springframework.test: INFO
+    com.organization.app.ms.messages: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
