@@ -1,4 +1,4 @@
-package com.organization.app.ms.process.configuration;
+package com.maestro.app.sample1.ms.process.configuration;
 
 import com.maestro.app.utils.domains.APIErrorResponse;
 import com.maestro.app.utils.exceptions.EntityRecordNotFound;

@@ -1,4 +1,4 @@
-package com.organization.app.ms.process.utils;
+package com.maestro.app.sample1.ms.process.utils;
 
 public class Constants {
         // Description for a user messages events
