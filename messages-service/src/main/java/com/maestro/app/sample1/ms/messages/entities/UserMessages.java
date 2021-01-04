@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "TBLL_USER_MESSAGES")
+@Table(name = "USER_MESSAGES")
 public class UserMessages implements Persistable {
     @Id
     @Column(name = "code", updatable = false)
