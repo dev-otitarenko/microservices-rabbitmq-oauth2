@@ -20,7 +20,7 @@ public class SwaggerConfig {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
 				.apis(RequestHandlerSelectors
-						.basePackage("com.maestro.app.sample1.ms.events"))
+ 			  .basePackage("com.maestro.app.sample1.ms.events"))
 				.paths(PathSelectors.any())
 				.build()
 				.apiInfo(apiInfo());
